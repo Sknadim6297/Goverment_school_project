@@ -93,7 +93,7 @@ class ComputerAdmissionController extends Controller
         // Clone the filtered query for download/export without pagination
         $exportQuery = clone $query;
 
-        // Handle CSV / XLS download
+        // Handle CSV / XLS / PDF download
         $downloadType = $request->input('download');
         if (in_array($downloadType, ['csv', 'xls'], true)) {
             $rows = $exportQuery->orderBy('enrollment_date', 'desc')->get();
@@ -131,6 +131,21 @@ class ComputerAdmissionController extends Controller
             };
 
             return response()->streamDownload($callback, $filename, $headers);
+        } elseif ($downloadType === 'pdf') {
+            $rows = $exportQuery->orderBy('enrollment_date', 'desc')->get();
+            $totals = [
+                'fee' => $rows->sum('course_fee'),
+                'paid' => $rows->sum('paid_amount'),
+            ];
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.computer-admission.reports_pdf', [
+                'rows' => $rows,
+                'totals' => $totals,
+                'filters' => [
+                    'date_from' => $request->input('date_from'),
+                    'date_to' => $request->input('date_to'),
+                ],
+            ])->setPaper('a4', 'portrait');
+            return $pdf->download('computer_admission_reports.pdf');
         }
 
         $computerAdmissions = $query->orderBy('enrollment_date', 'desc')->paginate(10);

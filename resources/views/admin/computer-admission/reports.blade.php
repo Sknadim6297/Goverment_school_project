@@ -36,6 +36,9 @@
                         <button type="submit" name="download" value="xls" class="btn btn-success">
                             <i class="fa fa-file-excel-o"></i> XLS
                         </button>
+                        <button type="submit" name="download" value="pdf" class="btn btn-danger">
+                            <i class="fa fa-file-pdf-o"></i> PDF
+                        </button>
                         <a href="{{ route('admin.computer_admission.reports') }}" class="btn btn-default">Clear</a>
                     </div>
                 </div>

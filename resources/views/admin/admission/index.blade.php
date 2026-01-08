@@ -25,11 +25,17 @@
                             </a>
                         </td>
                         <td>
-                            <a href="{{ route('admin.admission.export') }}">
-                                <button class="btn btn-success">
-                                    <i class="fa fa-download"></i> Download In Excel
-                                </button>
-                            </a>
+                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                <a href="{{ route('admin.admission.export', ['format' => 'xls']) }}" class="btn btn-success">
+                                    <i class="fa fa-file-excel-o"></i> Excel
+                                </a>
+                                <a href="{{ route('admin.admission.export', ['format' => 'csv']) }}" class="btn btn-success">
+                                    <i class="fa fa-download"></i> CSV
+                                </a>
+                                <a href="{{ route('admin.admission.export', ['format' => 'pdf']) }}" class="btn btn-danger">
+                                    <i class="fa fa-file-pdf-o"></i> PDF
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

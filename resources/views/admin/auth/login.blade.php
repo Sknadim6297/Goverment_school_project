@@ -20,6 +20,11 @@
             box-sizing: border-box;
         }
 
+        html {
+            overflow-x: hidden; /* prevent horizontal scroll */
+            width: 100%;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
@@ -27,22 +32,27 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: clamp(12px, 3vw, 24px);
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden; /* prevent horizontal scroll */
+            overflow-y: auto; /* allow vertical scroll on small screens */
+            width: 100%;
         }
 
         /* Animated Background Elements */
         body::before {
             content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            position: fixed; /* use fixed to prevent overflow */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
             background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
             background-size: 50px 50px;
             animation: moveBackground 20s linear infinite;
+            pointer-events: none; /* don't block interactions */
         }
 
         @keyframes moveBackground {
@@ -53,15 +63,19 @@
         .login-wrapper {
             position: relative;
             z-index: 1;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .login-container {
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+            border-radius: clamp(12px, 3vw, 20px);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.20);
             overflow: hidden;
             width: 100%;
-            max-width: 450px;
+            min-width: 280px; /* prevent too small on zoom */
+            margin: 0 auto; /* center horizontally */
             animation: slideUp 0.6s ease-out;
         }
 
@@ -78,7 +92,7 @@
 
         .login-header {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            padding: 130px 40px 40px; /* extra top space for fixed logo */
+            padding: clamp(24px, 5vw, 36px) clamp(16px, 4vw, 32px) clamp(18px, 3vw, 24px);
             text-align: center;
             color: white;
             position: relative;
@@ -102,18 +116,21 @@
         }
 
         .logo-container {
-            position: fixed; /* sticky at top */
-            top: 32px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 50;
-            margin-bottom: 0;
+            position: relative; /* contained within header */
+            top: 0;
+            left: 0;
+            transform: none;
+            z-index: 1;
+            margin-bottom: 12px;
             pointer-events: none; /* avoid blocking clicks */
         }
 
         .logo-container img {
-            height: 140px;
-            width: 140px;
+            display: block;
+            height: clamp(70px, 15vw, 96px);
+            width: auto;
+            max-width: clamp(120px, 25vw, 160px);
+            margin: 0 auto;
             object-fit: contain;
             background: transparent; /* no background */
             border-radius: 0; /* no radius wrapper */
@@ -128,8 +145,9 @@
         }
 
         .login-header h1 {
-            font-size: 32px;
-            margin-bottom: 8px;
+            font-size: clamp(22px, 5vw, 28px);
+            margin-top: clamp(8px, 2vw, 10px);
+            margin-bottom: clamp(4px, 1vw, 6px);
             font-weight: 700;
             position: relative;
             z-index: 1;
@@ -137,7 +155,7 @@
         }
 
         .login-header p {
-            font-size: 15px;
+            font-size: clamp(12px, 2.5vw, 14px);
             opacity: 0.95;
             font-weight: 400;
             position: relative;
@@ -145,7 +163,7 @@
         }
 
         .login-body {
-            padding: 45px 40px;
+            padding: clamp(20px, 4vw, 28px) clamp(16px, 3vw, 24px);
             background: white;
         }
 
@@ -219,20 +237,21 @@
 
         .input-group i {
             position: absolute;
-            left: 18px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--secondary-color);
-            font-size: 17px;
+            font-size: 16px;
             transition: all 0.3s ease;
+            pointer-events: none; /* do not intercept input focus */
         }
 
         .form-control {
             width: 100%;
-            padding: 14px 18px 14px 52px;
+            padding: clamp(12px, 2vw, 14px) clamp(14px, 2vw, 18px) clamp(12px, 2vw, 14px) clamp(42px, 8vw, 48px);
             border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 15px;
+            border-radius: clamp(8px, 2vw, 12px);
+            font-size: clamp(14px, 2.5vw, 15px);
             font-family: 'Poppins', sans-serif;
             transition: all 0.3s ease;
             background: #f9fafb;
@@ -292,19 +311,19 @@
 
         .btn-login {
             width: 100%;
-            padding: 16px;
+            padding: clamp(14px, 3vw, 16px);
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: clamp(8px, 2vw, 12px);
+            font-size: clamp(14px, 2.5vw, 16px);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: clamp(8px, 2vw, 12px);
             font-family: 'Poppins', sans-serif;
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
             position: relative;
@@ -359,45 +378,36 @@
         }
 
         @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            
+            .login-wrapper {
+                width: 100%;
+            }
+            
             .login-container {
-                margin: 10px;
-                border-radius: 20px;
+                min-width: 100%;
+                margin: 0;
             }
 
-            .login-header {
-                padding: 100px 25px 25px; /* accommodate fixed logo */
+            .input-group i {
+                left: 14px;
+                font-size: 14px;
             }
-
-
-
-            .logo-container img {
-                height: 110px;
-                width: 110px;
+        }
+        
+        @media (max-width: 360px) {
+            body {
+                padding: 4px;
             }
-
-            .login-header h1 {
-                font-size: 26px;
+            
+            .login-container {
+                border-radius: 8px;
             }
-
-            .login-header p {
-                font-size: 13px;
-            }
-
-            .login-body {
-                padding: 35px 25px;
-            }
-
-            .welcome-text h2 {
-                font-size: 22px;
-            }
-
-            .form-control {
-                padding: 13px 16px 13px 48px;
-            }
-
-            .btn-login {
-                padding: 14px;
-                font-size: 15px;
+            
+            .form-group {
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -411,6 +421,8 @@
                          alt="School Logo" 
                          onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231e3a8a%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2240%22 fill=%22white%22 font-weight=%22bold%22%3EGS%3C/text%3E%3C/svg%3E'">
                 </div>
+                <h1>Admin Login</h1>
+                <p>Sign in to access the dashboard</p>
             </div>
 
             <div class="login-body">

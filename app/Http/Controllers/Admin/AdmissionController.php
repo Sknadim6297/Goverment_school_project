@@ -187,9 +187,48 @@ class AdmissionController extends Controller
                          ->with('success', 'Receipt updated successfully!');
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        // Excel export logic here
-        return redirect()->back()->with('success', 'Data exported successfully!');
+        $format = $request->query('format', 'xls');
+        $rows = Admission::orderBy('created_at', 'desc')->get();
+
+        if (in_array($format, ['csv', 'xls'], true)) {
+            $filename = 'admissions.' . $format;
+            $headers = [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            ];
+
+            $callback = function () use ($rows) {
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, [
+                    'Sl.No.', 'Name', 'Class', 'Stream', 'Guardian Name', 'Mobile Number', 'Admission No', 'Admission Date'
+                ]);
+                foreach ($rows as $index => $row) {
+                    fputcsv($handle, [
+                        $index + 1,
+                        strtoupper($row->name),
+                        $row->class,
+                        $row->stream,
+                        $row->guardian_name,
+                        $row->mobile_number,
+                        $row->admission_no,
+                        optional($row->admission_date)->format('Y-m-d'),
+                    ]);
+                }
+                fclose($handle);
+            };
+
+            return response()->streamDownload($callback, $filename, $headers);
+        }
+
+        if ($format === 'pdf') {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.admission.export_pdf', [
+                'rows' => $rows,
+            ])->setPaper('a4', 'portrait');
+            return $pdf->download('admissions.pdf');
+        }
+
+        return redirect()->back()->with('error', 'Unsupported export format');
     }
 }

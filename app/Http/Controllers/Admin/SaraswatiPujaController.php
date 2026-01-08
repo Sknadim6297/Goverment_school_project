@@ -98,7 +98,7 @@ class SaraswatiPujaController extends Controller
         // Clone for export without pagination
         $exportQuery = clone $query;
 
-        // Handle CSV / XLS export
+        // Handle CSV / XLS / PDF export
         $downloadType = $request->input('download');
         if (in_array($downloadType, ['csv', 'xls'], true)) {
             $rows = $exportQuery->orderBy('payment_date', 'desc')->get();
@@ -133,6 +133,19 @@ class SaraswatiPujaController extends Controller
             };
 
             return response()->streamDownload($callback, $filename, $headers);
+        } elseif ($downloadType === 'pdf') {
+            $rows = $exportQuery->orderBy('payment_date', 'desc')->get();
+            $totalAmount = $rows->sum('fee_amount');
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.saraswati-puja.reports_pdf', [
+                'rows' => $rows,
+                'totalAmount' => $totalAmount,
+                'filters' => [
+                    'year' => $request->input('year'),
+                    'date_from' => $request->input('date_from'),
+                    'date_to' => $request->input('date_to'),
+                ],
+            ])->setPaper('a4', 'portrait');
+            return $pdf->download('saraswati_puja_reports.pdf');
         }
 
         $saraswatiPujaFees = $query->orderBy('payment_date', 'desc')->paginate(10);
