@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'position_hold',
     ];
 
     /**
@@ -44,5 +45,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get position name
+     */
+    public function getPositionNameAttribute()
+    {
+        $positions = [
+            1 => 'Admin',
+            2 => 'Accountant',
+            3 => 'Librarian'
+        ];
+        
+        return $positions[$this->position_hold] ?? 'Unknown';
     }
 }

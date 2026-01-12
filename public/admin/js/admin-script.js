@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form Validation
     initFormValidation();
     
-    // DataTables
-    initDataTables();
+    // DataTables - Initialize after a small delay
+    setTimeout(initDataTables, 50);
     
     // Confirmation Dialogs
     initConfirmDialogs();
@@ -137,46 +137,90 @@ function validateForm(form) {
 
 // DataTables Initialization
 function initDataTables() {
-    if (typeof $ !== 'undefined' && $.fn.DataTable) {
-        try {
-            // Destroy existing DataTable instances
-            $.fn.DataTable.tables({ visible: true }).api().destroy();
-            
-            // Initialize new DataTables
-            $('.data-table').each(function() {
-                if (!$.fn.DataTable.isDataTable(this)) {
-                    $(this).DataTable({
-                        "paging": true,
-                        "pageLength": 10,
-                        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                        "ordering": true,
-                        "order": [[0, "asc"]],
-                        "searching": true,
-                        "info": true,
-                        "autoWidth": false,
-                        "language": {
-                            "search": "Search:",
-                            "lengthMenu": "Show _MENU_ entries",
-                            "info": "Showing _START_ to _END_ of _TOTAL_ entries",
-                            "infoEmpty": "No entries available",
-                            "emptyTable": "No data available in table",
-                            "zeroRecords": "No matching records found",
-                            "paginate": {
-                                "first": "First",
-                                "last": "Last",
-                                "next": "Next",
-                                "previous": "Previous"
-                            }
-                        },
-                        "columnDefs": [
-                            { "orderable": false, "targets": -1 }
-                        ]
-                    });
-                }
-            });
-        } catch (e) {
-            console.warn('DataTables initialization warning:', e);
+    if (typeof $ === 'undefined' || !$.fn.DataTable) {
+        return;
+    }
+    
+    try {
+        const tables = document.querySelectorAll('.data-table');
+        
+        if (tables.length === 0) {
+            return;
         }
+        
+        let initializedCount = 0;
+        
+        tables.forEach(function(table, index) {
+            try {
+                // Skip if already initialized
+                if ($.fn.DataTable.isDataTable(table)) {
+                    return;
+                }
+                
+                // Verify table has proper structure
+                const thead = table.querySelector('thead');
+                const tbody = table.querySelector('tbody');
+                
+                if (!thead || !tbody) {
+                    return;
+                }
+                
+                // Get column count from thead
+                const headerRow = thead.querySelector('tr');
+                if (!headerRow) {
+                    return;
+                }
+                
+                const headerCells = headerRow.querySelectorAll('th');
+                const headerCount = headerCells.length;
+                
+                if (headerCount === 0) {
+                    return;
+                }
+                
+                
+                // Initialize the table
+                $(table).DataTable({
+                    "paging": true,
+                    "pageLength": 10,
+                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    "ordering": true,
+                    "order": [[0, "asc"]],
+                    "searching": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": false,
+                    "language": {
+                        "search": "Search:",
+                        "lengthMenu": "Show _MENU_ entries",
+                        "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                        "infoEmpty": "No entries available",
+                        "emptyTable": "No data available in table",
+                        "zeroRecords": "No matching records found",
+                        "paginate": {
+                            "first": "First",
+                            "last": "Last",
+                            "next": "Next",
+                            "previous": "Previous"
+                        }
+                    },
+                    "columnDefs": [
+                        { 
+                            "orderable": false, 
+                            "targets": headerCount - 1 // Last column not orderable
+                        }
+                    ]
+                });
+                
+                initializedCount++;
+                
+            } catch (tableError) {
+                // silently handle
+            }
+        });
+
+    } catch (e) {
+        // silently handle
     }
 }
 

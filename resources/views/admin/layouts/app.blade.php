@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('admin/css/forms.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/utilities.css') }}">
     
-    @stack('styles')
+    @yield('styles')
 </head>
 <body>
     <!-- Header -->
@@ -112,6 +112,46 @@
                 </ul>
             </li>
 
+            <!-- User Management Menu -->
+            <li class="menu-item has-submenu {{ request()->routeIs('admin.users.*') ? 'open' : '' }}">
+                <a href="#" class="menu-link">
+                    <i class="fa fa-users"></i>
+                    <span>User Management</span>
+                </a>
+                <ul class="submenu {{ request()->routeIs('admin.users.*') ? 'open' : '' }}">
+                    <li class="submenu-item">
+                        <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
+                            <i class="fa fa-list"></i> Manage Users
+                        </a>
+                    </li>
+                    <li class="submenu-item">
+                        <a href="{{ route('admin.users.create') }}" class="{{ request()->routeIs('admin.users.create') ? 'active' : '' }}">
+                            <i class="fa fa-plus"></i> Add New User
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Student Management Menu -->
+            <li class="menu-item has-submenu {{ request()->routeIs('admin.students.*') ? 'open' : '' }}">
+                <a href="#" class="menu-link">
+                    <i class="fa fa-user-graduate"></i>
+                    <span>Student Management</span>
+                </a>
+                <ul class="submenu {{ request()->routeIs('admin.students.*') ? 'open' : '' }}">
+                    <li class="submenu-item">
+                        <a href="{{ route('admin.students.index') }}" class="{{ request()->routeIs('admin.students.index') ? 'active' : '' }}">
+                            <i class="fa fa-list"></i> Manage Students
+                        </a>
+                    </li>
+                    <li class="submenu-item">
+                        <a href="{{ route('admin.students.create') }}" class="{{ request()->routeIs('admin.students.create') ? 'active' : '' }}">
+                            <i class="fa fa-plus"></i> Add New Student
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="menu-item">
                 <a href="#" class="menu-link">
                     <i class="fa fa-cog"></i>
@@ -175,6 +215,6 @@
     <!-- Admin JS -->
     <script src="{{ asset('admin/js/admin-script.js') }}"></script>
     
-    @stack('scripts')
+    @yield('scripts')
 </body>
 </html>

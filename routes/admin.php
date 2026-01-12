@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\AdmissionController;
 use App\Http\Controllers\Admin\ComputerAdmissionController;
 use App\Http\Controllers\Admin\SaraswatiPujaController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,5 +70,31 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         Route::delete('/delete/{id}', [SaraswatiPujaController::class, 'destroy'])->name('delete');
         Route::get('/reports', [SaraswatiPujaController::class, 'reports'])->name('reports');
         Route::get('/receipt/{id}', [SaraswatiPujaController::class, 'receipt'])->name('receipt');
+    });
+    
+    // User Management
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/store', [UserController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
+        Route::get('/export', [UserController::class, 'export'])->name('export');
+    });
+    
+    // Student Management
+    Route::prefix('students')->name('students.')->group(function () {
+        Route::get('/', [StudentController::class, 'index'])->name('index');
+        Route::post('/filter', [StudentController::class, 'filterByClass'])->name('filter');
+        Route::get('/create', [StudentController::class, 'create'])->name('create');
+        Route::post('/store', [StudentController::class, 'store'])->name('store');
+        Route::get('/view/{id}', [StudentController::class, 'view'])->name('view');
+        Route::get('/ledger/{id}', [StudentController::class, 'viewLedger'])->name('ledger');
+        Route::get('/edit/{id}', [StudentController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [StudentController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [StudentController::class, 'destroy'])->name('delete');
+        Route::get('/export', [StudentController::class, 'export'])->name('export');
+        Route::post('/bulk-upload', [StudentController::class, 'bulkUpload'])->name('bulk_upload');
     });
 });
