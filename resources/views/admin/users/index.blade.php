@@ -17,14 +17,14 @@
         <div class="box-body">
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible" style="margin-bottom: 20px;">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="color: #155724; opacity: 0.8;">×</button>
                     <i class="fa fa-check-circle"></i> {{ session('success') }}
                 </div>
             @endif
 
             @if(session('error'))
                 <div class="alert alert-danger alert-dismissible" style="margin-bottom: 20px;">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="color: #721c24; opacity: 0.8;">×</button>
                     <i class="fa fa-exclamation-circle"></i> {{ session('error') }}
                 </div>
             @endif

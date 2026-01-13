@@ -152,6 +152,22 @@
                 </ul>
             </li>
 
+            <!-- Collect Fees Menu -->
+            <li class="menu-item {{ request()->routeIs('admin.collect_fees.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.collect_fees.index') }}" class="menu-link">
+                    <i class="fa fa-indian-rupee-sign"></i>
+                    <span>Collect Fees</span>
+                </a>
+            </li>
+
+            <!-- Library Management Menu -->
+            <li class="menu-item {{ request()->routeIs('admin.library.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.library.index') }}" class="menu-link">
+                    <i class="fa fa-book"></i>
+                    <span>Library Management</span>
+                </a>
+            </li>
+
             <li class="menu-item">
                 <a href="#" class="menu-link">
                     <i class="fa fa-cog"></i>

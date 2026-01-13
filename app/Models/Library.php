@@ -5,29 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Library extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'admission_id',
         'student_id',
-        'receipt_no',
-        'amount',
-        'payment_date',
-        'payment_mode',
-        'transaction_id',
+        'student_name',
+        'registration_no',
+        'class_name',
+        'book_name',
+        'issue_date',
+        'return_date',
+        'returning_on',
+        'status',
         'remarks',
     ];
 
     protected $casts = [
-        'payment_date' => 'date',
+        'issue_date' => 'date',
+        'return_date' => 'date',
+        'returning_on' => 'date',
     ];
-
-    public function admission()
-    {
-        return $this->belongsTo(Admission::class);
-    }
 
     public function student()
     {

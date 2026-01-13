@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admission_id')->constrained('admissions')->onDelete('cascade');
+            $table->foreignId('admission_id')->nullable()->constrained('admissions')->onDelete('cascade');
             $table->string('receipt_no')->unique();
             $table->decimal('amount', 10, 2);
             $table->date('payment_date');
-            $table->enum('payment_mode', ['cash', 'online', 'cheque'])->default('cash');
+            $table->string('payment_mode')->default('Cash');
             $table->string('transaction_id')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();

@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\SaraswatiPujaController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\CollectFeesController;
+use App\Http\Controllers\Admin\LibraryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,5 +98,24 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         Route::delete('/delete/{id}', [StudentController::class, 'destroy'])->name('delete');
         Route::get('/export', [StudentController::class, 'export'])->name('export');
         Route::post('/bulk-upload', [StudentController::class, 'bulkUpload'])->name('bulk_upload');
+    });
+
+    // Collect Fees Management
+    Route::prefix('collect-fees')->name('collect_fees.')->group(function () {
+        Route::get('/', [CollectFeesController::class, 'index'])->name('index');
+        Route::post('/search', [CollectFeesController::class, 'search'])->name('search');
+        Route::get('/{id}', [CollectFeesController::class, 'show'])->name('show');
+        Route::post('/store', [CollectFeesController::class, 'store'])->name('store');
+    });
+
+    // Library Management
+    Route::prefix('library')->name('library.')->group(function () {
+        Route::get('/', [LibraryController::class, 'index'])->name('index');
+        Route::get('/add', [LibraryController::class, 'create'])->name('create');
+        Route::post('/store', [LibraryController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [LibraryController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [LibraryController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [LibraryController::class, 'destroy'])->name('delete');
+        Route::get('/export', [LibraryController::class, 'export'])->name('export');
     });
 });
